@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="DeepSample">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/DeepSample/DeepSample_part_1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/DeepSample/DeepSample_part_1_class.jar!/" />
+      <root url="jar://$PROJECT_DIR$/DeepSample/DeepEST_reg.jar!/" />
+      <root url="jar://$PROJECT_DIR$/DeepSample/SUPS_reg.jar!/" />
+      <root url="jar://$PROJECT_DIR$/DeepSample/DeepEST_class.jar!/" />
+      <root url="jar://$PROJECT_DIR$/DeepSample/SUPS_class.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
