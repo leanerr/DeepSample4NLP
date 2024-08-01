@@ -163,3 +163,10 @@ public class InitializerTF {
 	•	Threshold DSA: 1.088059648139901
 	•	Dataset Size: 50000
  */
+
+
+
+/*
+(env) aliasgari@Rebellean DeepSample-master % javac -d bin -cp "/Users/aliasgari/Downloads/DeepSample-master/libs/commons-lang3-3.12.0.jar:/Users/aliasgari/Downloads/DeepSample-master/libs/commons-math3-3.6.1.jar:/Users/aliasgari/Downloads/DeepSample-master/libs/weka.jar:." $(find main utility selector/classification -name "*.java")
+
+ */
