@@ -7,6 +7,7 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJECT_ROOT/dataset" || exit
 
 # Activate the Python virtual environment
+echo "Activating Python virtual environment..."
 source env/bin/activate
 
 # Define the list of auxiliary variables to process
@@ -16,12 +17,14 @@ auxiliary_variables=("confidence" "entropy" "similarity" "dsa" "lsa")
 for dataset in imdb300AuxDS SSTIMDB3000AuxDS SSTtestAuxDS imdbAuxDS
 do
     # Run the threshold_lsa.py script and capture output
-    lsa_output=$(python3 threshold_lsa.py $dataset)
+    echo "Calculating LSA threshold for $dataset..."
+    lsa_output=$(python3 threshold_lsa.py "$dataset")
     threshold_lsa=$(echo "$lsa_output" | grep 'Threshold LSA' | awk '{print $3}')
     dataset_size=$(echo "$lsa_output" | grep 'Dataset Size' | awk '{print $3}')
 
     # Run the threshold_dsa.py script and capture output
-    dsa_output=$(python3 threshold_dsa.py $dataset)
+    echo "Calculating DSA threshold for $dataset..."
+    dsa_output=$(python3 threshold_dsa.py "$dataset")
     threshold_dsa=$(echo "$dsa_output" | grep 'Threshold DSA' | awk '{print $3}')
 
     budget=50
@@ -55,7 +58,8 @@ do
         result_path="$PROJECT_ROOT/Results/Classification/DeepEST/${dataset}.${aux}"
 
         # Execute the Java program with the appropriate parameters
-        java -Xmx51200m -cp "$PROJECT_ROOT/DeepSample/source_code/bin:$PROJECT_ROOT/libs/commons-lang3-3.12.0.jar:$PROJECT_ROOT/libs/commons-math3-3.6.1.jar:$PROJECT_ROOT/libs/weka.jar" main.DeepEST_classification "$PROJECT_ROOT/dataset/$dataset.csv" $aux $threshold $budget $dataset_size $result_path >> log.txt
+        echo "Running DeepEST for $dataset with auxiliary variable $aux..."
+        java -Xmx51200m -cp "$PROJECT_ROOT/DeepSample/source_code/bin:$PROJECT_ROOT/libs/commons-lang3-3.12.0.jar:$PROJECT_ROOT/libs/commons-math3-3.6.1.jar:$PROJECT_ROOT/libs/weka.jar" main.DeepEST_classification "$PROJECT_ROOT/dataset/$dataset.csv" "$aux" "$threshold" "$budget" "$dataset_size" "$result_path" >> log.txt
 
         # Clear the log file after each execution
         rm log.txt
@@ -63,4 +67,7 @@ do
 done
 
 # Deactivate the Python virtual environment
+echo "Deactivating Python virtual environment..."
 deactivate
+
+echo "All datasets processed successfully."

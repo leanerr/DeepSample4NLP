@@ -59,109 +59,111 @@ The "libs" folder contains all the libraries required to run the experiments.
 # DeepEST Project  
 
 This project is designed for running a deep sampling technique on datasets, using various auxiliary variables. The project is structured with Java for computational tasks and Python for threshold computations.
+Here's a concise `README.md` for your project, including instructions for cloning, running the project, and an overview of the project architecture:
 
-## Prerequisites
+---
 
-Before you begin, ensure you have the following installed:
+# DeepSample Project
 
-- Java Development Kit (JDK) 11 or later
-- Python 3.x
-- Python virtual environment (`venv`)
+DeepSample is a deep sampling tool that applies sophisticated sampling techniques to datasets for enhanced analysis and processing. The project utilizes both Java for computational efficiency and Python for pre-processing and threshold calculations.
 
-## Directory Structure
+## Table of Contents
 
-```plaintext
-DeepSample-master/
-│
-├── dataset/
-│   ├── threshold_lsa.py
-│   ├── threshold_dsa.py
-│   ├── imdb300AuxDS.csv
-│   ├── SSTIMDB3000AuxDS.csv
-│   ├── SSTtestAuxDS.csv
-│   ├── imdbAuxDS.csv
-│   └── env/                # Python virtual environment
-│
-├── DeepSample/
-│   ├── source_code/
-│   │   ├── bin/
-│   │   ├── main/
-│   │   ├── selector/
-│   │   └── utility/
-│   ├── build_and_run.sh
-│   └── run_DeepEST.sh
-│
-├── libs/
-│   ├── commons-lang3-3.12.0.jar
-│   ├── commons-math3-3.6.1.jar
-│   └── weka.jar
-│
-└── Results/
-    └── Classification/
-        └── DeepEST/
-```
+- [Project Architecture](#project-architecture)
+- [Cloning the Repository](#cloning-the-repository)
+- [Setting Up and Running the Project](#setting-up-and-running-the-project)
+- [Directory Structure](#directory-structure)
+- [Results](#results)
 
-## Setup Instructions
+## Project Architecture
 
-Follow these steps to set up and run the project:
+The DeepSample project is structured into several components, each handling a specific aspect of the workflow:
 
-### 1. Clone the Repository
+1. **Dataset Processing**:
+    - **Python Scripts**: Responsible for calculating thresholds for various auxiliary variables.
+    - **Threshold Scripts**: Use the `pandas` library to compute thresholds like LSA and DSA for datasets.
 
-Clone this repository to your local machine:
+2. **Java Processing**:
+    - **Main Logic**: Implemented in Java for efficient processing of datasets using various sampling techniques.
+    - **Java Classes**: Includes modules for data initialization, test frame management, and selector algorithms.
+
+3. **Integration**:
+    - **Shell Scripts**: Automate the setup, build, and execution processes, integrating Python pre-processing with Java execution.
+
+## Cloning the Repository
+
+To get started with the DeepSample project, clone the repository from GitHub:
 
 ```bash
 git clone https://github.com/leanerr/DeepSample.git
 cd DeepSample-master
 ```
 
-### 2. Set Up the Python Environment
+This command will download the project files to your local machine and navigate you into the project directory.
 
-Navigate to the `dataset` directory and set up the Python environment:
+## Setting Up and Running the Project
 
-```bash
-cd dataset
-python3 -m venv env
-source env/bin/activate  # On Windows, use `env\Scripts\activate`
-pip install -r requirements.txt  # Install required Python packages
+Follow these steps to set up and execute the project:
+
+1. **Create and Activate a Python Virtual Environment**:
+
+   Navigate to the `dataset` directory and set up the Python environment:
+
+   ```bash
+   cd dataset
+   python3 -m venv env
+   source env/bin/activate  # On Windows, use `env\Scripts\activate`
+   pip install pandas
+   ```
+
+   > This sets up a virtual environment and installs the necessary Python packages.
+
+2. **Build and Run the Project**:
+
+   Navigate back to the project root and execute the build and run script:
+
+   ```bash
+   cd ..
+   ./build_and_run.sh
+   ```
+
+   This script will compile the Java source code and run the DeepEST sampling algorithm on the datasets.
+
+## Directory Structure
+
+The project is organized as follows:
+
+```plaintext
+DeepSample-master/
+│
+├── dataset/
+│   ├── env/                       # Python virtual environment
+│   ├── threshold_lsa.py           # Python script to calculate LSA threshold
+│   ├── threshold_dsa.py           # Python script to calculate DSA threshold
+│   ├── *.csv                      # Dataset files
+│
+├── DeepSample/
+│   ├── source_code/
+│   │   ├── bin/                   # Compiled Java class files
+│   │   ├── main/                  # Main Java source files
+│   │   ├── selector/              # Selector algorithm implementations
+│   │   └── utility/               # Utility classes and methods
+│   └── run_DeepEST.sh             # Script to run the DeepEST process
+│
+├── libs/                          # Java libraries
+│   ├── commons-lang3-3.12.0.jar
+│   ├── commons-math3-3.6.1.jar
+│   └── weka.jar
+│
+├── Results/
+│   └── Classification/
+│       └── DeepEST/               # Output results of the sampling process
+│
+└── build_and_run.sh               # Main script to build and execute the project
 ```
 
-### 3. Build the Java Project
+## Results
 
-Navigate to the `DeepSample` directory and run the build script:
-
-```bash
-cd ../DeepSample
-./build_and_run.sh
-```
-
-This script will compile the Java source code located in `source_code` and generate class files in the `bin` directory.
-
-### 4. Run the DeepEST Script
-
-Execute the DeepEST script to process datasets using different auxiliary variables:
-
-```bash
-./run_DeepEST.sh
-```
-
-### 5. Check the Results
-
-After the script execution, results will be available in the `Results/Classification/DeepEST` directory, with separate CSV files for each dataset and auxiliary variable.
-
-## Modifying the Auxiliary Variables
-
-To modify the auxiliary variables or thresholds used in the computations, edit the `run_DeepEST.sh` script accordingly:
-
-```bash
-auxiliary_variables=("confidence" "entropy" "similarity" "dsa" "lsa")
-```
-
-Adjust the thresholds within the script as needed.
-
-## Troubleshooting
-
-- Ensure all necessary dependencies are installed and that your `JAVA_HOME` is correctly set.
-- Check file paths and permissions if you encounter any issues during script execution.
-
+After running the project, the results are stored in the `Results/Classification/DeepEST` directory. Each dataset is processed with different auxiliary variables, and the results are saved in separate CSV files named according to the dataset and variable, such as `imdb300AuxDS.confidence.csv`.
 
 
