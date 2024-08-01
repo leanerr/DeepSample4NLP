@@ -47,3 +47,121 @@ A Python notebook is provided for the practitioners to query the results, for in
 ## Requirements and Dependencies
 The provided code requires Java 8.
 The "libs" folder contains all the libraries required to run the experiments.
+
+
+
+
+
+
+
+---
+
+# DeepEST Project  
+
+This project is designed for running a deep sampling technique on datasets, using various auxiliary variables. The project is structured with Java for computational tasks and Python for threshold computations.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- Java Development Kit (JDK) 11 or later
+- Python 3.x
+- Python virtual environment (`venv`)
+
+## Directory Structure
+
+```plaintext
+DeepSample-master/
+│
+├── dataset/
+│   ├── threshold_lsa.py
+│   ├── threshold_dsa.py
+│   ├── imdb300AuxDS.csv
+│   ├── SSTIMDB3000AuxDS.csv
+│   ├── SSTtestAuxDS.csv
+│   ├── imdbAuxDS.csv
+│   └── env/                # Python virtual environment
+│
+├── DeepSample/
+│   ├── source_code/
+│   │   ├── bin/
+│   │   ├── main/
+│   │   ├── selector/
+│   │   └── utility/
+│   ├── build_and_run.sh
+│   └── run_DeepEST.sh
+│
+├── libs/
+│   ├── commons-lang3-3.12.0.jar
+│   ├── commons-math3-3.6.1.jar
+│   └── weka.jar
+│
+└── Results/
+    └── Classification/
+        └── DeepEST/
+```
+
+## Setup Instructions
+
+Follow these steps to set up and run the project:
+
+### 1. Clone the Repository
+
+Clone this repository to your local machine:
+
+```bash
+git clone https://github.com/leanerr/DeepSample.git
+cd DeepSample-master
+```
+
+### 2. Set Up the Python Environment
+
+Navigate to the `dataset` directory and set up the Python environment:
+
+```bash
+cd dataset
+python3 -m venv env
+source env/bin/activate  # On Windows, use `env\Scripts\activate`
+pip install -r requirements.txt  # Install required Python packages
+```
+
+### 3. Build the Java Project
+
+Navigate to the `DeepSample` directory and run the build script:
+
+```bash
+cd ../DeepSample
+./build_and_run.sh
+```
+
+This script will compile the Java source code located in `source_code` and generate class files in the `bin` directory.
+
+### 4. Run the DeepEST Script
+
+Execute the DeepEST script to process datasets using different auxiliary variables:
+
+```bash
+./run_DeepEST.sh
+```
+
+### 5. Check the Results
+
+After the script execution, results will be available in the `Results/Classification/DeepEST` directory, with separate CSV files for each dataset and auxiliary variable.
+
+## Modifying the Auxiliary Variables
+
+To modify the auxiliary variables or thresholds used in the computations, edit the `run_DeepEST.sh` script accordingly:
+
+```bash
+auxiliary_variables=("confidence" "entropy" "similarity" "dsa" "lsa")
+```
+
+Adjust the thresholds within the script as needed.
+
+## Troubleshooting
+
+- Ensure all necessary dependencies are installed and that your `JAVA_HOME` is correctly set.
+- Check file paths and permissions if you encounter any issues during script execution.
+
+
+
