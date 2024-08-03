@@ -1,0 +1,1 @@
+no main manifest attribute, in SUPS_class.jar
