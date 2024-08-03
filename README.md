@@ -63,9 +63,10 @@ Here's a concise `README.md` for your project, including instructions for clonin
 
 ---
 
+
 # DeepSample Project
 
-DeepSample is a deep sampling tool that applies sophisticated sampling techniques to datasets for enhanced analysis and processing. The project utilizes both Java for computational efficiency and Python for pre-processing and threshold calculations.
+DeepSample is a comprehensive sampling tool designed for performing advanced sampling techniques on datasets to facilitate enhanced analysis and processing. The project leverages Java for computational efficiency and Python for preprocessing and threshold calculations. It includes two main components: **DeepEST** and **SUPS**.
 
 ## Table of Contents
 
@@ -77,18 +78,18 @@ DeepSample is a deep sampling tool that applies sophisticated sampling technique
 
 ## Project Architecture
 
-The DeepSample project is structured into several components, each handling a specific aspect of the workflow:
+The DeepSample project consists of two main components, each handling a specific aspect of the workflow:
 
-1. **Dataset Processing**:
-    - **Python Scripts**: Responsible for calculating thresholds for various auxiliary variables.
-    - **Threshold Scripts**: Use the `pandas` library to compute thresholds like LSA and DSA for datasets.
+1. **DeepEST Component**:
+   - **Python Scripts**: Calculate thresholds for various auxiliary variables such as LSA and DSA.
+   - **Java Processing**: Implements the DeepEST sampling algorithm using efficient Java classes.
 
-2. **Java Processing**:
-    - **Main Logic**: Implemented in Java for efficient processing of datasets using various sampling techniques.
-    - **Java Classes**: Includes modules for data initialization, test frame management, and selector algorithms.
+2. **SUPS Component**:
+   - **Java Logic**: Implements the SUPS sampling strategy, which applies sophisticated sampling techniques to datasets using auxiliary variables like confidence and entropy.
+   - **Shell Scripts**: Automate the setup, build, and execution processes for SUPS sampling.
 
 3. **Integration**:
-    - **Shell Scripts**: Automate the setup, build, and execution processes, integrating Python pre-processing with Java execution.
+   - **Shell Scripts**: Facilitate the seamless integration of Python preprocessing and Java execution, automating the workflow from start to finish.
 
 ## Cloning the Repository
 
@@ -105,29 +106,39 @@ This command will download the project files to your local machine and navigate 
 
 Follow these steps to set up and execute the project:
 
-1. **Create and Activate a Python Virtual Environment**:
+### 1. Create and Activate a Python Virtual Environment
 
-   Navigate to the `dataset` directory and set up the Python environment:
+Navigate to the `dataset` directory and set up the Python environment:
 
-   ```bash
-   cd dataset
-   python3 -m venv env
-   source env/bin/activate  # On Windows, use `env\Scripts\activate`
-   pip install pandas
-   ```
+```bash
+cd dataset
+python3 -m venv env
+source env/bin/activate  # On Windows, use `env\Scripts\activate`
+pip install pandas
+```
 
-   > This sets up a virtual environment and installs the necessary Python packages.
+> This sets up a virtual environment and installs the necessary Python packages.
 
-2. **Build and Run the Project**:
+### 2. Build and Run the DeepEST Component
 
-   Navigate back to the project root and execute the build and run script:
+Navigate back to the project root and execute the build and run script for DeepEST:
 
-   ```bash
-   cd ..
-   ./build_and_run.sh
-   ```
+```bash
+cd ..
+./build_and_run.sh
+```
 
-   This script will compile the Java source code and run the DeepEST sampling algorithm on the datasets.
+This script will compile the Java source code and run the DeepEST sampling algorithm on the datasets.
+
+### 3. Build and Run the SUPS Component
+
+Ensure you are in the project root and run the build and run script for SUPS:
+
+```bash
+./build_and_run_SUPS.sh
+```
+
+This script compiles the Java source code and executes the SUPS sampling process, storing results and logs appropriately.
 
 ## Directory Structure
 
@@ -148,8 +159,9 @@ DeepSample-master/
 │   │   ├── main/                  # Main Java source files
 │   │   ├── selector/              # Selector algorithm implementations
 │   │   └── utility/               # Utility classes and methods
-│   └── run_DeepEST.sh             # Script to run the DeepEST process
-│
+│   ├── SUPS_class.jar             # Compiled JAR for SUPS execution
+│   ├── run_DeepEST.sh             # Script to run the DeepEST process
+│   └── run_SUPS.sh                # Script to run the SUPS process
 ├── libs/                          # Java libraries
 │   ├── commons-lang3-3.12.0.jar
 │   ├── commons-math3-3.6.1.jar
@@ -157,13 +169,23 @@ DeepSample-master/
 │
 ├── Results/
 │   └── Classification/
-│       └── DeepEST/               # Output results of the sampling process
+│       ├── DeepEST/               # Output results of the DeepEST sampling process
+│       └── SUPS/                  # Output results of the SUPS sampling process
 │
-└── build_and_run.sh               # Main script to build and execute the project
+├── logs/                          # Directory for log files
+│   └── sups_log_*.txt             # Logs for SUPS execution
+│
+├── build_and_run_DeepEST.sh       # Script to build and run the DeepEST project
+└── build_and_run_SUPS.sh          # Script to build and run the SUPS project
 ```
 
 ## Results
 
-After running the project, the results are stored in the `Results/Classification/DeepEST` directory. Each dataset is processed with different auxiliary variables, and the results are saved in separate CSV files named according to the dataset and variable, such as `imdb300AuxDS.confidence.csv`.
+After running the project, the results are stored in the `Results/Classification/` directory. Each dataset is processed with different auxiliary variables, and the results are saved in separate CSV files named according to the dataset and variable, such as:
+
+- **DeepEST Results**: Stored in `Results/Classification/DeepEST/`.
+- **SUPS Results**: Stored in `Results/Classification/SUPS/`.
+
+These results can be used for further analysis and validation of the sampling strategies applied.
 
 
