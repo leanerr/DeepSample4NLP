@@ -162,11 +162,49 @@ public class InitializerTF {
 	•	Threshold LSA: 0.217697339165843
 	•	Threshold DSA: 1.088059648139901
 	•	Dataset Size: 50000
+
+
+
+
+	java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar imdb300AuxDS 0 2999
+
+
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar SSTIMDB3000AuxDS 0 1160
+
+
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar SSTtestAuxDS 0 1820
+
+
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar imdbAuxDS 0 50000
  */
 
 
 
 /*
 (env) aliasgari@Rebellean DeepSample-master % javac -d bin -cp "/Users/aliasgari/Downloads/DeepSample-master/libs/commons-lang3-3.12.0.jar:/Users/aliasgari/Downloads/DeepSample-master/libs/commons-math3-3.6.1.jar:/Users/aliasgari/Downloads/DeepSample-master/libs/weka.jar:." $(find main utility selector/classification -name "*.java")
+
+ */
+
+
+/*
+Problems for part1:
+
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar imdb300AuxDS 2 2999
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar imdb300AuxDS 4 2999
+
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar SSTIMDB3000AuxDS 0 1160
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar SSTIMDB3000AuxDS 2 1160
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar SSTIMDB3000AuxDS 4 1160
+
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar SSTtestAuxDS 2 1820
+
+
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar imdbAuxDS 0 50000
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar imdbAuxDS 1 50000
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar imdbAuxDS 2 50000
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar imdbAuxDS 3 50000
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar imdbAuxDS 4 50000
+
+
 
  */

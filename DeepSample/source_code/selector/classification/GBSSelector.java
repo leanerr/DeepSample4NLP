@@ -1,158 +1,165 @@
 package selector.classification;
 
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
-
 import utility.TestCase;
 
-//DA FARE COME OMPLEMETNAZIONEDI CLASSE ASTRATTA
 public class GBSSelector extends TestCaseSelector {
-	
-	
-	 public double REstimate;
-	 public double trueReliability;
-	 public int numberOfDetectedFailurePoints;
-	  public int numberOfExecutedTestCases;
-	  public long executionTime;
-	
-	  
-	public GBSSelector(ArrayList<TestCase> _potentialTestSuite, ArrayList<ArrayList<TestCase>> _partitions, int _nPartitions, int _initialNumberOfTestCases, int _budget){
-		super(_potentialTestSuite,  _partitions, _nPartitions, _initialNumberOfTestCases, _budget);
-	};
-	
-	public void selectAndRunTestCase(){
-		
-		
-//		System.out.println("\n\nStarting the AT Algorithm ... \n");
-		int indexPartition = 0; 
-		TestCase testCaseToExecute;
-		
-		double[] executedtTestCasesPerPartition = new double[this.numberOfPartitions]; //ni
-		double[] failureRates = new double[this.numberOfPartitions]; //theta
-		int[] failedTestCases  =  new int[this.numberOfPartitions]; //z
-		double[] gradient = new double[this.numberOfPartitions];
-		double[] domainProbSum = new double[this.numberOfPartitions];  //DOMAIN SIZE: p
-		int totalTests = this.budget;
-		int indexCurrentTest =0;
-		int totalFailurePoint=0;
-		
-		long initTime = System.currentTimeMillis(); 
-		boolean testOutcome;
-		//STEP 1: initialize 
-		for (indexPartition=0; indexPartition< this.numberOfPartitions; indexPartition++) {
-			executedtTestCasesPerPartition [indexPartition] = 1;
-			failedTestCases[indexPartition] =0;
-			domainProbSum[indexPartition] = 0;    
-		}
-		
-		//READ PARTITIONS and initialize probabilities
-		for (indexPartition=0; indexPartition<this.numberOfPartitions;indexPartition++){
-				for(int indexInTheList=0; indexInTheList<this.partitions.get(indexPartition).size();indexInTheList++)
-		    		domainProbSum[indexPartition] = domainProbSum[indexPartition] +this.partitions.get(indexPartition).get(indexInTheList).getExpectedOccurrenceProbability();
-		}
-		
 
-		//STEP 2 and 3: select one test case from each subdomain, and execute it against the software under test; record the result
-		for (indexPartition=0; indexPartition< this.numberOfPartitions; indexPartition++){ 
-			testCaseToExecute = selectFromPartition(indexPartition);
-			testOutcome = testCaseToExecute.runTestCase("FITTIZIO");
-			if (testOutcome==false) {failedTestCases[indexPartition]++;totalFailurePoint++;} 
-			indexCurrentTest++;
-			executedtTestCasesPerPartition[indexPartition]++; //LO AGGIUNGO IO
+	// Declare variables to track reliability estimation and test outcomes
+	public double REstimate;
+	public double trueReliability;
+	public int numberOfDetectedFailurePoints;
+	public int numberOfExecutedTestCases;
+	public long executionTime;
+
+	// Constructor initializes the selector with necessary parameters
+	public GBSSelector(ArrayList<TestCase> _potentialTestSuite, ArrayList<ArrayList<TestCase>> _partitions, int _nPartitions, int _initialNumberOfTestCases, int _budget) {
+		super(_potentialTestSuite, _partitions, _nPartitions, _initialNumberOfTestCases, _budget);
+	}
+
+	// Method to select and run test cases
+	public void selectAndRunTestCase() {
+		int indexPartition;
+		TestCase testCaseToExecute;
+
+		// Initialize arrays to track executed test cases, failure rates, etc.
+		double[] executedTestCasesPerPartition = new double[this.numberOfPartitions];
+		double[] failureRates = new double[this.numberOfPartitions];
+		int[] failedTestCases = new int[this.numberOfPartitions];
+		double[] gradient = new double[this.numberOfPartitions];
+		double[] domainProbSum = new double[this.numberOfPartitions];
+
+		int totalTests = this.budget;
+		int indexCurrentTest = 0;
+		int totalFailurePoint = 0;
+
+		// Record the start time of the execution
+		long initTime = System.currentTimeMillis();
+
+		// Initialize the counts for each partition
+		for (indexPartition = 0; indexPartition < this.numberOfPartitions; indexPartition++) {
+			executedTestCasesPerPartition[indexPartition] = 1;
+			failedTestCases[indexPartition] = 0;
+			domainProbSum[indexPartition] = 0;
 		}
-		
-		
-		double maximumGradient;
-		int maximumGradientPartition=0;
-		while(indexCurrentTest < totalTests){
-			
-			//STEP 5: update estimate of theta 
-			for (indexPartition=0; indexPartition< this.numberOfPartitions; indexPartition++){
-				if (failedTestCases[indexPartition] == 0)
-					failureRates[indexPartition] = (failedTestCases[indexPartition]+1)/(executedtTestCasesPerPartition[indexPartition] +1);
-				else failureRates[indexPartition] = (failedTestCases[indexPartition])/(executedtTestCasesPerPartition[indexPartition]);
-				
-				gradient[indexPartition] = (Math.pow(domainProbSum[indexPartition],2)*failureRates[indexPartition] *(1-failureRates[indexPartition]))/Math.pow(executedtTestCasesPerPartition[indexPartition], 2);
-	
+
+		// Calculate the domain probability sum for each partition
+		for (indexPartition = 0; indexPartition < this.numberOfPartitions; indexPartition++) {
+			for (TestCase testCase : this.partitions.get(indexPartition)) {
+				domainProbSum[indexPartition] += testCase.getExpectedOccurrenceProbability();
 			}
-			
-			//STEP 6 select the subdomain with the GREATEST GRADEINT
-			maximumGradient=gradient[0];
-			maximumGradientPartition=0;;
-			for (indexPartition=1; indexPartition< this.numberOfPartitions; indexPartition++){
-				if(gradient[indexPartition] > maximumGradient){
-					maximumGradient =gradient[indexPartition];
-					maximumGradientPartition = indexPartition; 
+		}
+
+		// Execute one test case from each partition initially
+		for (indexPartition = 0; indexPartition < this.numberOfPartitions; indexPartition++) {
+			if (this.partitions.get(indexPartition).isEmpty()) {
+				System.err.println("Warning: Partition " + indexPartition + " is empty.");
+				continue;
+			}
+
+			testCaseToExecute = selectFromPartition(indexPartition);
+			boolean testOutcome = testCaseToExecute.runTestCase("FITTIZIO");
+			if (!testOutcome) {
+				failedTestCases[indexPartition]++;
+				totalFailurePoint++;
+			}
+			indexCurrentTest++;
+			executedTestCasesPerPartition[indexPartition]++;
+		}
+
+		// Loop to execute remaining test cases based on gradients
+		double maximumGradient;
+		int maximumGradientPartition = -1;
+
+		while (indexCurrentTest < totalTests) {
+			// Update failure rate estimates for each partition
+			for (indexPartition = 0; indexPartition < this.numberOfPartitions; indexPartition++) {
+				// Avoid division by zero
+				if (executedTestCasesPerPartition[indexPartition] == 0) {
+					continue;
+				}
+
+				failureRates[indexPartition] = (failedTestCases[indexPartition] + 1.0) / (executedTestCasesPerPartition[indexPartition] + 1.0);
+
+				// Calculate the gradient for the partition
+				gradient[indexPartition] = (Math.pow(domainProbSum[indexPartition], 2) * failureRates[indexPartition] * (1 - failureRates[indexPartition])) / Math.pow(executedTestCasesPerPartition[indexPartition], 2);
+			}
+
+			// Find the partition with the maximum gradient
+			maximumGradient = Double.MIN_VALUE;
+			maximumGradientPartition = -1;
+
+			for (indexPartition = 0; indexPartition < this.numberOfPartitions; indexPartition++) {
+				if (gradient[indexPartition] > maximumGradient) {
+					maximumGradient = gradient[indexPartition];
+					maximumGradientPartition = indexPartition;
 				}
 			}
-	
+
+			// Check if a valid partition was found
+			if (maximumGradientPartition == -1 || this.partitions.get(maximumGradientPartition).isEmpty()) {
+				System.err.println("Error: No valid partition found with maximum gradient or partition is empty.");
+				break; // Or handle accordingly
+			}
+
+			// Select and run a test case from the partition with the maximum gradient
 			testCaseToExecute = selectFromPartition(maximumGradientPartition);
-			testOutcome = testCaseToExecute.runTestCase("FITTIZIO");
-			if (testOutcome==false) {
+			boolean testOutcome = testCaseToExecute.runTestCase("FITTIZIO");
+
+			if (!testOutcome) {
 				failedTestCases[maximumGradientPartition]++;
 				totalFailurePoint++;
-				}
-			executedtTestCasesPerPartition[maximumGradientPartition]++;
-			
+			}
+
+			executedTestCasesPerPartition[maximumGradientPartition]++;
 			indexCurrentTest++;
 		}
-		
-		//last update of theta
-	//	if (failedTestCases[maximumGradientPartition] == 0)
-	//		failureRates[maximumGradientPartition] = (failedTestCases[maximumGradientPartition]+1)/(executedtTestCasesPerPartition[maximumGradientPartition] +1);
-	//	else 
-		failureRates[maximumGradientPartition] = (failedTestCases[maximumGradientPartition])/(executedtTestCasesPerPartition[maximumGradientPartition]);
-		
-		
-		//STEP 8 EVALUATE THE RELIABILITY
-		double sumFailureRate = 0.0;
-		for (indexPartition=0; indexPartition< this.numberOfPartitions; indexPartition++){
-			sumFailureRate =  sumFailureRate + domainProbSum[indexPartition]*failureRates[indexPartition];  
+
+		// Update the final failure rate estimate for the partition
+		if (executedTestCasesPerPartition[maximumGradientPartition] > 0) {
+			failureRates[maximumGradientPartition] = (double) failedTestCases[maximumGradientPartition] / executedTestCasesPerPartition[maximumGradientPartition];
 		}
-		this.REstimate = 1 - sumFailureRate; 
+
+		// Calculate the overall reliability estimate
+		double sumFailureRate = 0.0;
+		for (indexPartition = 0; indexPartition < this.numberOfPartitions; indexPartition++) {
+			sumFailureRate += domainProbSum[indexPartition] * failureRates[indexPartition];
+		}
+		this.REstimate = 1 - sumFailureRate;
 		this.trueReliability = computeTrueReliability();
-		
+
+		// Record the end time and calculate execution time
 		long endTime = System.currentTimeMillis();
-		this.executionTime = endTime - initTime; 
+		this.executionTime = endTime - initTime;
 		this.numberOfExecutedTestCases = indexCurrentTest;
 		this.numberOfDetectedFailurePoints = totalFailurePoint;
-		
-//		System.out.println("\n ************ True Reliability: "+this.trueReliability);
-//		System.out.println("\n ************ Reliability Estimate: "+this.REstimate);
-//		System.out.println("\n ************ Offset: "+(this.REstimate - this.trueReliability));
-//		System.out.println("\n ************ squared error of "+Math.pow((this.REstimate - this.trueReliability),2));
-//		System.out.println("\n ************ Detected Failures: "+totalFailurePoint);
-		
 	}
-	
-	private double computeTrueReliability(){
-		
-		
+
+	// Method to compute true reliability
+	private double computeTrueReliability() {
 		boolean outcome;
-		double unrel=0.0;
-		int totalFailPoints=0;
-		for (int i=0; i<this.potentialTestSuite.size(); i++){
-			outcome =  this.potentialTestSuite.get(i).getOutcome();
-			if (outcome==false) {
-				unrel = unrel +  this.potentialTestSuite.get(i).getExpectedOccurrenceProbability();
-				totalFailPoints++;
+		double unrel = 0.0;
+
+		for (TestCase testCase : this.potentialTestSuite) {
+			outcome = testCase.getOutcome();
+			if (!outcome) {
+				unrel += testCase.getExpectedOccurrenceProbability();
 			}
 		}
-	/*	System.out.println("potentialTestSuite.size(): "+potentialTestSuite.size());
-		System.out.println("Unreliability: "+unrel);
-		System.out.println("TotFailPoint From the beginning "+totalFailPoints);
-		*/
-		return (1- unrel);
+
+		return (1 - unrel);
 	}
-	
-	private TestCase selectFromPartition(int maximumGradientPartition){
-			
-		//SELECT RANDOMLY A TEST IN THE PARTITION
-		int randIndex =  new Random().nextInt(this.partitions.get(maximumGradientPartition).size());	
-		return  this.partitions.get(maximumGradientPartition).get(randIndex);
-		
+
+	// Method to select a test case from a given partition
+	private TestCase selectFromPartition(int partitionIndex) {
+		// Check for non-empty partition
+		if (this.partitions.get(partitionIndex).isEmpty()) {
+			throw new IllegalStateException("Partition " + partitionIndex + " is empty. Cannot select a test case.");
+		}
+
+		// Randomly select a test case from the specified partition
+		int randIndex = new Random().nextInt(this.partitions.get(partitionIndex).size());
+		return this.partitions.get(partitionIndex).get(randIndex);
 	}
-		
-} 
+}

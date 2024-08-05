@@ -1,4 +1,5 @@
 package utility;
+
 import java.io.PrintWriter;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -217,5 +218,28 @@ public class TestCase {
 
 	public void setExpectedFailureLikelihood(double expectedFailureLikelihood) {
 		this.expectedFailureLikelihood = expectedFailureLikelihood;
+	}
+
+	/**
+	 * Returns the value of the auxiliary variable specified by the index.
+	 *
+	 * @param auxIndex The index of the auxiliary variable (e.g., 0 for Confidence_Score).
+	 * @return The value of the auxiliary variable.
+	 */
+	public double getAuxiliaryVariable(int auxIndex) {
+		switch (auxIndex) {
+			case 0:
+				return getConfidenceScore();
+			case 1:
+				return getPredictionEntropy();
+			case 2:
+				return getSimilarityScore();
+			case 3:
+				return getDsa();
+			case 4:
+				return getLsa();
+			default:
+				throw new IllegalArgumentException("Invalid auxiliary variable index: " + auxIndex);
+		}
 	}
 }

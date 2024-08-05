@@ -1,10 +1,14 @@
 package main;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import selector.classification.GBSSelector;
-import selector.classification.TwoUPSSelector;
 import selector.classification.PartitionInfo;
 import selector.classification.RHCSSelector;
 import selector.classification.StratifiedRandomSelectorWOR;
@@ -19,35 +23,41 @@ public class Classification_main_jar {
 		int key = Integer.parseInt(args[1]);
 		int size = Integer.parseInt(args[2]);
 
-		String aux;
-		if (key == 1) { // Confidence_Score
-			aux = "confidence";
-		} else if (key == 2) { // Prediction_Entropy
-			aux = "entropy";
-		} else if (key == 3) { // Similarity_Score
-			aux = "similarity";
-		} else if (key == 4) { // DSA
-			aux = "dsa";
-		} else if (key == 5) { // LSA
-			aux = "lsa";
-		} else {
-			throw new IllegalArgumentException("Invalid key. Must be 1, 2, 3, 4, or 5.");
+		// Determine the index for each auxiliary variable based on the CSV header
+		Map<String, Integer> columnIndices = getColumnIndices(path);
+
+		// Mapping key to auxiliary variable name, updated to zero-based index
+		String aux = getAuxiliaryVariableName(key);
+
+		// Validate if the column exists in the dataset
+		if (!columnIndices.containsKey(aux)) {
+			throw new IllegalArgumentException("Auxiliary variable " + aux + " not found in dataset.");
 		}
 
-		/****INITIALIZATION ****/
+		// Get the correct column index for the selected auxiliary variable
+		int auxIndex = columnIndices.get(aux);
+
+		/**** INITIALIZATION ****/
 
 		int NPartitionsSimulation = 10;
 		TestSuiteFileLoader tsfl = new TestSuiteFileLoader();
-		tsfl.loadTestSuiteSimulation_class(path, key, size);
+		tsfl.loadTestSuiteSimulation_class(path, auxIndex, size);
 
 		ArrayList<PartitionInfo> partitionsStructure = null;
 		ArrayList<TestCase> completeTestSuite = new ArrayList<TestCase>();
 		ArrayList<TestCase> completeTestSuite_copy;
 
 		try {
-			partitionsStructure = tsfl.getPartitionsSimulation_kNN(NPartitionsSimulation, key, path);
+			partitionsStructure = tsfl.getPartitionsSimulation_kNN(NPartitionsSimulation, auxIndex, path);
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(1); // Exit on error
+		}
+
+		// Check if partitionsStructure is null
+		if (partitionsStructure == null) {
+			System.err.println("Error: partitionsStructure is null");
+			System.exit(1);
 		}
 
 		ArrayList<ArrayList<TestCase>> partitions = new ArrayList<ArrayList<TestCase>>();
@@ -76,34 +86,35 @@ public class Classification_main_jar {
 
 				writer.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			System.out.println("2-UPS: budget " + budget);
+			// Commenting out the TwoUPSSelector related code
+            /*
+            System.out.println("2-UPS: budget " + budget);
 
-			for (int j = 0; j < rep; j++) {
-				TwoUPSSelector opt = new TwoUPSSelector(completeTestSuite, partitions, NPartitionsSimulation, 0, budget);
-				opt.selectAndRunTestCase();
-			}
+            for (int j = 0; j < rep; j++) {
+                TwoUPSSelector opt = new TwoUPSSelector(completeTestSuite, partitions, NPartitionsSimulation, 0, budget);
+                opt.selectAndRunTestCase();
+            }
 
-			try {
-				FileWriter writer = new FileWriter("./Results/Classification/2-UPS/" + model + "_" + aux + "_" + budget + ".txt");
+            try {
+                FileWriter writer = new FileWriter("./Results/Classification/2-UPS/" + model + "_" + aux + "_" + budget + ".txt");
 
-				writer.write("accuracy,failures\n");
+                writer.write("accuracy,failures\n");
 
-				for (int j = 0; j < rep; j++) {
-					TwoUPSSelector opt = new TwoUPSSelector(completeTestSuite, partitions, NPartitionsSimulation, 0, budget);
-					opt.selectAndRunTestCase();
-					System.out.println("" + opt.REstimate + "    " + opt.numberOfDetectedFailurePoints);
-					writer.write("" + opt.REstimate + "," + opt.numberOfDetectedFailurePoints + "\n");
-				}
+                for (int j = 0; j < rep; j++) {
+                    TwoUPSSelector opt = new TwoUPSSelector(completeTestSuite, partitions, NPartitionsSimulation, 0, budget);
+                    opt.selectAndRunTestCase();
+                    System.out.println("" + opt.REstimate + "    " + opt.numberOfDetectedFailurePoints);
+                    writer.write("" + opt.REstimate + "," + opt.numberOfDetectedFailurePoints + "\n");
+                }
 
-				writer.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            */
 
 			System.out.println("GBS: budget " + budget);
 			try {
@@ -115,12 +126,11 @@ public class Classification_main_jar {
 					GBSSelector ats = new GBSSelector(completeTestSuite, partitions, NPartitionsSimulation, 0, budget);
 					ats.selectAndRunTestCase();
 					System.out.println("" + ats.REstimate + "    " + ats.numberOfDetectedFailurePoints);
-					writer.write("" + ats.REstimate + "    " + ats.numberOfDetectedFailurePoints + "\n");
+					writer.write("" + ats.REstimate + "," + ats.numberOfDetectedFailurePoints + "\n");
 				}
 
 				writer.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -134,15 +144,72 @@ public class Classification_main_jar {
 					completeTestSuite_copy = new ArrayList<TestCase>(completeTestSuite);
 					RHCSSelector rdts = new RHCSSelector(completeTestSuite_copy, budget, budget);
 					rdts.selectAndRunTestCase(95);
-					System.out.println("" + rdts.estimate + "    " + rdts.numberOffailedTestCases);
-					writer.write("" + rdts.estimate + "," + rdts.numberOffailedTestCases + "\n");
+					System.out.println("" + rdts.estimate + "    " + rdts.numberOfFailedTestCases);
+					writer.write("" + rdts.estimate + "," + rdts.numberOfFailedTestCases + "\n");
 				}
 
 				writer.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
+
+/**
+ * Reads the CSV file header and returns a map of column names to their indices.
+ *
+ * @param csvFilePath The path to the CSV file.
+ * @return A map of column names to indices.
+ */
+
+
+private static Map<String, Integer> getColumnIndices(String csvFilePath) {
+	Map<String, Integer> columnIndices = new HashMap<>();
+	try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+		String headerLine = br.readLine();
+		if (headerLine != null) {
+			String[] headers = headerLine.split(",");
+			for (int i = 0; i < headers.length; i++) {
+				columnIndices.put(headers[i].trim(), i);
+			}
+		}
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	return columnIndices;
 }
+
+	/**
+	 * Maps the key to the corresponding auxiliary variable name.
+	 *
+	 * @param key The key indicating the auxiliary variable.
+	 * @return The name of the auxiliary variable.
+	 */
+	private static String getAuxiliaryVariableName(int key) {
+		switch (key) {
+			case 0:
+				return "Confidence_Score";
+			case 1:
+				return "Prediction_Entropy";
+			case 2:
+				return "Similarity_Score";
+			case 3:
+				return "DSA";
+			case 4:
+				return "LSA";
+			default:
+				throw new IllegalArgumentException("Invalid key. Must be 0, 1, 2, 3, or 4.");
+			}
+	}
+}
+
+
+
+/*
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar imdb300AuxDS 0 2999
+*/
+/*
+java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar imdb300AuxDS 0 2999
+ */
+
+
