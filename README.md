@@ -72,7 +72,6 @@ This script will compile the Java source code and run the classification samplin
 Navigate back to the project root and execute the build and run script for DeepEST:
 
 ```bash
-cd ..
 ./build_and_run.sh
 ```
 
