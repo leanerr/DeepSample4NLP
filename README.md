@@ -1,70 +1,6 @@
-# DeepSample 
-
-This repository provides the artifacts for DeepSample execution. 
-The experiments on 9 DNN for classification and 2 DNN for regression can be replicated by running the script 'run_DeepSample.sh'.
-Once the experiments are completed, all the results will be generated in the 'Results' folder.
-
-## DeepSample folder
-The folder "DeepSample" contains all the ".jar" files and the source code.
-The source code is organized as follows:
-- The "main" folder contains all the java files for the jar generation.
-- "selector.classification" contains the source code of the implemented sampling algorithms for classification, plus DeepEST.
-- "selector.regression" contains the source code of the implemented sampling algorithms for regression, plus DeepEST.
-- "utility" and "utility.regression" contain utilities and data structures useful for the selectors.
-
-The code has been developed with Eclipse.
-
-## Other samplers
-CES and SRS implementations are available at: 'https://github.com/Lizenan1995/DNNOpAcc'.
-The results can be replicated by:
-1. cloning the repository;
-2. importing the models in 'CE method/MNIST/normal';
-3. importing and running in 'CE method/MNIST/normal' the files available in the 'CES_SRS' folder of our repository ('crossentropy*.py' files). 
-
-In the following, we reported the chosen layers (LAY parameter in 'crossentropy*.py') required to run CES for each model: 
-- A: -2 
-- B: -4
-- C: -2
-- D: -4
-- E: -4
-- F: -2
-- G: -2
-- H: -4
-- I: -4
-- Dave_orig: -3
-- Dave_dropout: -3
-
-## Neural Networks availability
-The trained models are included in the 'models' folder. Model G, Dave_orig and Dave_dropout models are available at 'https://file.io/0405r74sgwqV'.
-The folder 'dataset' contains the dataset with the predictions and the auxiliary variables for all models.
-The source code for the classification models is available at: 'https://github.com/ICOS-OAA/ICOS.git'
-
-## Paper results
-The folder 'Results_paper' contains the results reported in the paper.
-
-A Python notebook is provided for the practitioners to query the results, for instance to ask for the best performing technique (based on their occurrences in the top-3 rankings) given a main objective (low RMSE, RMedSE or large failure exposure ability) and a configuration as input (e.g., small sample size, MNIST dataset, confidence as auxiliary variable) ([notebook](./Results_paper/_Discussion/interactive_notebook/summary.ipynb))
-
-## Requirements and Dependencies
-The provided code requires Java 8.
-The "libs" folder contains all the libraries required to run the experiments.
 
 
-
-
-
-
-
----
-
-# DeepEST Project  
-
-This project is designed for running a deep sampling technique on datasets, using various auxiliary variables. The project is structured with Java for computational tasks and Python for threshold computations.
-Here's a concise `README.md` for your project, including instructions for cloning, running the project, and an overview of the project architecture:
-
----
-
-
-# DeepSample Project
+# DeepSample4NLP Projects
 
 DeepSample is a comprehensive sampling tool designed for performing advanced sampling techniques on datasets to facilitate enhanced analysis and processing. The project leverages Java for computational efficiency and Python for preprocessing and threshold calculations. It includes two main components: **DeepEST** and **SUPS**.
 
@@ -73,19 +9,20 @@ DeepSample is a comprehensive sampling tool designed for performing advanced sam
 - [Project Architecture](#project-architecture)
 - [Cloning the Repository](#cloning-the-repository)
 - [Setting Up and Running the Project](#setting-up-and-running-the-project)
+- [Classification Methods](#classification-methods)
 - [Directory Structure](#directory-structure)
 - [Results](#results)
 
 ## Project Architecture
 
-The DeepSample project consists of two main components, each handling a specific aspect of the workflow:
+The DeepSample project is structured into distinct components that manage different aspects of the workflow:
 
 1. **DeepEST Component**:
-   - **Python Scripts**: Calculate thresholds for various auxiliary variables such as LSA and DSA.
+   - **Python Scripts**: Calculate thresholds for various auxiliary variables such as Local Sensitivity Analysis (LSA) and Deep Sensitivity Analysis (DSA).
    - **Java Processing**: Implements the DeepEST sampling algorithm using efficient Java classes.
 
 2. **SUPS Component**:
-   - **Java Logic**: Implements the SUPS sampling strategy, which applies sophisticated sampling techniques to datasets using auxiliary variables like confidence and entropy.
+   - **Java Logic**: Implements the SUPS sampling strategy, applying sophisticated sampling techniques to datasets using auxiliary variables like confidence and entropy.
    - **Shell Scripts**: Automate the setup, build, and execution processes for SUPS sampling.
 
 3. **Integration**:
@@ -96,7 +33,7 @@ The DeepSample project consists of two main components, each handling a specific
 To get started with the DeepSample project, clone the repository from GitHub:
 
 ```bash
-git clone https://github.com/leanerr/DeepSample.git
+git clone https://github.com/leanerr/DeepSample4NLP.git
 cd DeepSample-master
 ```
 
@@ -119,7 +56,18 @@ pip install pandas
 
 > This sets up a virtual environment and installs the necessary Python packages.
 
-### 2. Build and Run the DeepEST Component
+### 2. Build and Run the DeepSample Part 1 for Classification Methods
+
+Navigate back to the project root and execute the build and run script for DeepSample Part 1:
+
+```bash
+cd ..
+./build_and_run_DeepSamplePart1_Class.sh
+```
+
+This script will compile the Java source code and run the classification sampling algorithms on the datasets, specifically targeting Part 1 classification methods.
+
+### 3. Build and Run the DeepEST Component
 
 Navigate back to the project root and execute the build and run script for DeepEST:
 
@@ -130,7 +78,7 @@ cd ..
 
 This script will compile the Java source code and run the DeepEST sampling algorithm on the datasets.
 
-### 3. Build and Run the SUPS Component
+### 4. Build and Run the SUPS Component
 
 Ensure you are in the project root and run the build and run script for SUPS:
 
@@ -139,6 +87,17 @@ Ensure you are in the project root and run the build and run script for SUPS:
 ```
 
 This script compiles the Java source code and executes the SUPS sampling process, storing results and logs appropriately.
+
+## Classification Methods
+
+DeepSample Part 1 supports the following classification methods for testing and analysis:
+
+- **G2-UPS**: A two-stage sampling method that enhances accuracy by combining various sampling techniques.
+- **DeepEST**: Implements advanced sampling using auxiliary variables to achieve precise sampling outcomes.
+- **GBS (Greedy Bayesian Sampling)**: Utilizes Bayesian methods for efficient sampling, optimizing based on model uncertainty.
+- **RHC-S (Randomized Hill Climbing with Sampling)**: Uses randomized hill climbing strategies to explore the solution space efficiently.
+- **SSRS (Stratified Sampling with Random Sampling)**: Combines stratified sampling techniques with random sampling for better representation.
+- **SUPS (Sampling Using Prediction Sensitivity)**: Applies sampling strategies based on prediction sensitivity to improve failure detection.
 
 ## Directory Structure
 
@@ -162,6 +121,7 @@ DeepSample-master/
 │   ├── SUPS_class.jar             # Compiled JAR for SUPS execution
 │   ├── run_DeepEST.sh             # Script to run the DeepEST process
 │   └── run_SUPS.sh                # Script to run the SUPS process
+│   
 ├── libs/                          # Java libraries
 │   ├── commons-lang3-3.12.0.jar
 │   ├── commons-math3-3.6.1.jar
@@ -175,8 +135,9 @@ DeepSample-master/
 ├── logs/                          # Directory for log files
 │   └── sups_log_*.txt             # Logs for SUPS execution
 │
-├── build_and_run_DeepEST.sh       # Script to build and run the DeepEST project
+├── build_and_run.sh               # Script to build and run the DeepEST project
 └── build_and_run_SUPS.sh          # Script to build and run the SUPS project
+└── build_and_run_DeepSamplePart1_Class.sh # Script for classification methods
 ```
 
 ## Results
@@ -187,5 +148,43 @@ After running the project, the results are stored in the `Results/Classification
 - **SUPS Results**: Stored in `Results/Classification/SUPS/`.
 
 These results can be used for further analysis and validation of the sampling strategies applied.
+
+
+Certainly! Here's the content to include a section about the model and datasets used in the DeepSample project:
+
+---
+
+## Model
+
+### DistilBERT for Sentiment Analysis
+
+The DeepSample project utilizes the DistilBERT model for performing sentiment analysis, specifically focusing on binary classification tasks. DistilBERT is a distilled version of BERT (Bidirectional Encoder Representations from Transformers), designed to be lighter and faster while maintaining a high level of accuracy.
+
+- **Model Name**: [distilbert/distilbert-base-uncased-finetuned-sst-2-english](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english)
+- **Task**: Sentiment Analysis (Binary Classification)
+- **Description**: This model is fine-tuned on the SST-2 dataset, making it well-suited for sentiment classification tasks where the goal is to determine the sentiment (positive or negative) of a given text input.
+
+## Datasets
+
+The DeepSample project employs various datasets for training and evaluating the performance of the sentiment analysis model. These datasets encompass a variety of text samples, ranging from movie reviews to balanced datasets, combining different sources for comprehensive analysis.
+
+1. **SST-2 Dataset**:
+   - **Source**: [SST-2 Sentiment Analysis Dataset](https://github.com/YJiangcm/SST-2-sentiment-analysis/tree/master/data)
+   - **Description**: The Stanford Sentiment Treebank (SST-2) is a well-known benchmark dataset for sentiment analysis. It includes a collection of movie reviews with binary sentiment annotations (positive or negative).
+   - **Splits**: Train, Dev, Test
+
+2. **IMDB Dataset**:
+   - **Source**: [IMDB Movie Reviews Dataset](https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews)
+   - **Description**: This dataset consists of 50,000 movie reviews from IMDB, labeled as positive or negative. It is widely used for sentiment analysis tasks due to its large size and rich content.
+
+3. **IMDB3000 Dataset**:
+   - **Source**: [IMDB3000 Dataset](https://huggingface.co/datasets/enoreyes/imdb_3000_sphere)
+   - **Description**: A smaller, curated version of the IMDB dataset, the IMDB3000 dataset provides a balanced subset of 3,000 reviews, designed to test model performance on a more concise dataset.
+
+4. **Balanced Dataset (SST + IMDB3000)**:
+   - **Description**: This dataset combines the SST-2 dataset and the IMDB3000 dataset to create a balanced collection of sentiment annotations. By merging these datasets, the project ensures a diverse range of sentiment expressions, allowing for robust testing and validation of the model.
+
+---
+
 
 
