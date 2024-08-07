@@ -52,13 +52,14 @@ public class GBSSelector extends TestCaseSelector {
 		}
 
 		// Execute one test case from each partition initially
+		Random random = new Random();  // Consider adding a seed for reproducibility
 		for (indexPartition = 0; indexPartition < this.numberOfPartitions; indexPartition++) {
 			if (this.partitions.get(indexPartition).isEmpty()) {
 				System.err.println("Warning: Partition " + indexPartition + " is empty.");
 				continue;
 			}
 
-			testCaseToExecute = selectFromPartition(indexPartition);
+			testCaseToExecute = selectFromPartition(indexPartition, random);
 			boolean testOutcome = testCaseToExecute.runTestCase("FITTIZIO");
 			if (!testOutcome) {
 				failedTestCases[indexPartition]++;
@@ -104,7 +105,7 @@ public class GBSSelector extends TestCaseSelector {
 			}
 
 			// Select and run a test case from the partition with the maximum gradient
-			testCaseToExecute = selectFromPartition(maximumGradientPartition);
+			testCaseToExecute = selectFromPartition(maximumGradientPartition, random);
 			boolean testOutcome = testCaseToExecute.runTestCase("FITTIZIO");
 
 			if (!testOutcome) {
@@ -152,14 +153,14 @@ public class GBSSelector extends TestCaseSelector {
 	}
 
 	// Method to select a test case from a given partition
-	private TestCase selectFromPartition(int partitionIndex) {
+	private TestCase selectFromPartition(int partitionIndex, Random random) {
 		// Check for non-empty partition
 		if (this.partitions.get(partitionIndex).isEmpty()) {
 			throw new IllegalStateException("Partition " + partitionIndex + " is empty. Cannot select a test case.");
 		}
 
 		// Randomly select a test case from the specified partition
-		int randIndex = new Random().nextInt(this.partitions.get(partitionIndex).size());
+		int randIndex = random.nextInt(this.partitions.get(partitionIndex).size());
 		return this.partitions.get(partitionIndex).get(randIndex);
 	}
 }

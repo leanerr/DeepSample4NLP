@@ -20,30 +20,33 @@ public class PartitionInfo {
 
 	public void addTestCase(TestCase t) {
 		listOfTests.add(t);
+		computeStatistics(); // Automatically update statistics when a test case is added
 	}
 
-	public void compute_expectedOccurrenceProbability() {
-		expectedOccurrenceProbability = 0;
-		for (int i = 0; i < listOfTests.size(); i++) {
-			expectedOccurrenceProbability += listOfTests.get(i).getExpectedOccurrenceProbability();
-		}
+	/**
+	 * Compute expected occurrence probability.
+	 */
+	public void computeExpectedOccurrenceProbability() {
+		expectedOccurrenceProbability = listOfTests.stream()
+				.mapToDouble(TestCase::getExpectedOccurrenceProbability)
+				.sum();
 	}
 
-	public void compute_expectedFailureLikelihood() {
-		expectedFailureLikelihood = 0;
-		for (int i = 0; i < listOfTests.size(); i++) {
-			expectedFailureLikelihood += listOfTests.get(i).getExpectedFailureLikelihood();
-		}
+	/**
+	 * Compute expected failure likelihood.
+	 */
+	public void computeExpectedFailureLikelihood() {
+		expectedFailureLikelihood = listOfTests.stream()
+				.mapToDouble(TestCase::getExpectedFailureLikelihood)
+				.average().orElse(0.0); // Use average to reflect likelihood per test case
 	}
 
-	public void compute_expectedOccAndFail() {
-		expectedOccurrenceProbability = 0;
-		expectedFailureLikelihood = 0;
-		for (int i = 0; i < listOfTests.size(); i++) {
-			expectedOccurrenceProbability += listOfTests.get(i).getExpectedOccurrenceProbability();
-			expectedFailureLikelihood += listOfTests.get(i).getExpectedFailureLikelihood();
-		}
-		expectedFailureLikelihood = expectedFailureLikelihood / (double) listOfTests.size();
+	/**
+	 * Compute both expected occurrence probability and failure likelihood.
+	 */
+	public void computeStatistics() {
+		computeExpectedOccurrenceProbability();
+		computeExpectedFailureLikelihood();
 	}
 
 	public String getName() {
@@ -92,13 +95,14 @@ public class PartitionInfo {
 
 	public void setListOfTests(ArrayList<TestCase> listOfTests) {
 		this.listOfTests = listOfTests;
+		computeStatistics(); // Recompute statistics when list is reset
 	}
 
 	public int getNumberOfTestCases() {
 		return numberOfTestCases;
 	}
 
-	public int getNumberOfTestCases_compute() {
+	public int computeNumberOfTestCases() {
 		return listOfTests.size();
 	}
 

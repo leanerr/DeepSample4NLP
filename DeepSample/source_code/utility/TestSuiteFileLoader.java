@@ -107,8 +107,9 @@ public class TestSuiteFileLoader {
 			partitionsInfo.get(clusters[i]).addTestCase(localTestSuite.get(i));
 		}
 
+		// Example correction in TestSuiteFileLoader
 		for (int i = 0; i < NPartitions; i++) {
-			partitionsInfo.get(i).compute_expectedOccAndFail();
+			partitionsInfo.get(i).computeStatistics(); // Ensure this matches the method name in PartitionInfo
 		}
 
 		checkWellFormedness(partitionsInfo);

@@ -1,6 +1,7 @@
 package selector.classification;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import utility.TestCase;
@@ -99,13 +100,16 @@ public class StratifiedRandomSelectorWOR extends TestCaseSelector {
         double[] failureRatePerPartition = new double[this.numberOfPartitions];
         double sumFailureRate = 0.0;
 
+        Random rand = new Random();  // Ensure random instance is created once for consistent seeding behavior
+
         for (indexPartition = 0; indexPartition < this.numberOfPartitions; indexPartition++) {
             failureRatePerPartition[indexPartition] = 0.0;
 
+            // Create a copy of the partition list to work with
             ArrayList<TestCase> sampleTestCase = new ArrayList<>(this.partitions.get(indexPartition));
 
             for (int numberOfTests = 0; numberOfTests < testCasesPerPartition[indexPartition]; numberOfTests++) {
-                int randIndex = new Random().nextInt(sampleTestCase.size());
+                int randIndex = rand.nextInt(sampleTestCase.size());  // Ensure random index is chosen from the list
                 testCaseToExecute = sampleTestCase.get(randIndex);
 
                 testOutcome = testCaseToExecute.runTestCase("FITTIZIO");
@@ -115,7 +119,7 @@ public class StratifiedRandomSelectorWOR extends TestCaseSelector {
                 }
                 executedTestCasesPerPartition[indexPartition]++;
                 indexCurrentTest++;
-                sampleTestCase.remove(randIndex);
+                sampleTestCase.remove(randIndex);  // Remove the test case to ensure no replacement
             }
 
             if (executedTestCasesPerPartition[indexPartition] > 0) {

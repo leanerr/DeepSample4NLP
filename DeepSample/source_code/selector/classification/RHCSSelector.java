@@ -16,7 +16,7 @@ public class RHCSSelector extends TestCaseSelector {
 	public double varianceEstimate;
 	public long executionTime;
 	public int failurePoints;
-	public int numberOfFailedTestCases;  // Ensure this variable is declared
+	public int numberOfFailedTestCases;
 	public ArrayList<TestCase> failedTestCasesList;
 	public ArrayList<TestCase> copy;
 
@@ -24,7 +24,7 @@ public class RHCSSelector extends TestCaseSelector {
 	public RHCSSelector(ArrayList<TestCase> potentialTestSuite, int initialNumberOfTestCases, int budget) {
 		super(potentialTestSuite, initialNumberOfTestCases, budget);
 		this.failurePoints = 0;
-		this.numberOfFailedTestCases = 0; // Initialize this variable
+		this.numberOfFailedTestCases = 0;
 		this.copy = new ArrayList<>(potentialTestSuite);
 		this.failedTestCasesList = new ArrayList<>();
 	}
@@ -83,7 +83,7 @@ public class RHCSSelector extends TestCaseSelector {
 		this.varianceEstimate = estimatedVariance.doubleValue();
 		this.executionTime = endTime - initTime;
 		this.failedTestCasesList = FailedTestCases;
-		this.numberOfFailedTestCases = FailedTestCases.size(); // Update number of failed test cases
+		this.numberOfFailedTestCases = FailedTestCases.size();
 	}
 
 	// Compute variance estimator
@@ -149,9 +149,10 @@ public class RHCSSelector extends TestCaseSelector {
 
 		// Assign test cases to groups
 		int indexForGroup;
+		Random random = new Random(); // Create one Random instance
 		for (int indexGroup1 = 0; indexGroup1 < GMatrix.length; indexGroup1++) {
 			for (int indexGroup2 = 0; indexGroup2 < GMatrix[0].length - 1; indexGroup2++) {
-				int randomInt = new Random().nextInt(listOfIndexes.size());
+				int randomInt = random.nextInt(listOfIndexes.size());
 				indexForGroup = listOfIndexes.remove(randomInt);
 				GMatrix[indexGroup1][indexGroup2] = p[indexForGroup];
 				GMatrixIndex[indexGroup1][indexGroup2] = indexForGroup;
@@ -184,17 +185,17 @@ public class RHCSSelector extends TestCaseSelector {
 				}
 			}
 		}
-
 		double randomDouble;
 		int indexOfUnitToRead = -1;
 		ArrayList<Integer> indexesToRemove = new ArrayList<>();
 
 		for (int i = 0; i < numberOfGroups; i++) {
 			if (probSumOfGroup[i] == 0) {
-				throw new Exception("Probability sum of group " + i + " is zero, cannot select unit.");
+				System.out.println("Warning: Probability sum of group " + i + " is zero, skipping this group.");
+				continue;  // Skip groups with zero probability sum
 			}
 
-			randomDouble = (new Random().nextDouble()) * probSumOfGroup[i];
+			randomDouble = random.nextDouble() * probSumOfGroup[i];
 			for (int j = 0; j < GMatrix[0].length; j++) {
 				if (randomDouble <= cumProbOfGroup[i][j]) {
 					indexOfUnitToRead = j;
@@ -210,11 +211,11 @@ public class RHCSSelector extends TestCaseSelector {
 				throw new Exception("Invalid index in group " + i + " at position " + indexOfUnitToRead);
 			}
 
-			TestCase testCaseToExecute = population.get(indexInP);  // Correctly declare the variable here
+			TestCase testCaseToExecute = population.get(indexInP);
 
 			// Execute test case and collect output
 			outputValues[i] = testCaseToExecute.runTestCase("running...");
-			pValue[i] = p[indexInP]; // SIZE = Test Case Probability * Failure Likelihood
+			pValue[i] = p[indexInP];
 
 			if (!outputValues[i]) {
 				FailedTestCases.add(testCaseToExecute);
@@ -265,5 +266,4 @@ public class RHCSSelector extends TestCaseSelector {
 		TDistribution t = new TDistribution(numberOfGroups - 1);
 		estimatedCI_HalfWidth.setValue(t.inverseCumulativeProbability(0.975) * Math.sqrt(estimatedVariance.doubleValue()));
 	}
-
 }
