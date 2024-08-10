@@ -3,7 +3,6 @@ package selector.classification;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-
 import utility.TestCase;
 
 // StratifiedRandomSelectorWOR class implementing stratified sampling without replacement

@@ -20,6 +20,9 @@ public class GBSSelector extends TestCaseSelector {
 
 	// Method to select and run test cases
 	public void selectAndRunTestCase() {
+		System.out.println("Starting test selection with " + this.numberOfPartitions + " partitions.");
+		System.out.println("Budget: " + this.budget);
+
 		int indexPartition;
 		TestCase testCaseToExecute;
 
@@ -49,6 +52,7 @@ public class GBSSelector extends TestCaseSelector {
 			for (TestCase testCase : this.partitions.get(indexPartition)) {
 				domainProbSum[indexPartition] += testCase.getExpectedOccurrenceProbability();
 			}
+			System.out.println("Initial domainProbSum for partition " + indexPartition + ": " + domainProbSum[indexPartition]);
 		}
 
 		// Execute one test case from each partition initially
@@ -60,7 +64,11 @@ public class GBSSelector extends TestCaseSelector {
 			}
 
 			testCaseToExecute = selectFromPartition(indexPartition, random);
+			System.out.println("Selected test case from partition " + indexPartition + ": " + testCaseToExecute);
+
 			boolean testOutcome = testCaseToExecute.runTestCase("FITTIZIO");
+			System.out.println("Test outcome: " + testOutcome);
+
 			if (!testOutcome) {
 				failedTestCases[indexPartition]++;
 				totalFailurePoint++;
@@ -85,6 +93,7 @@ public class GBSSelector extends TestCaseSelector {
 
 				// Calculate the gradient for the partition
 				gradient[indexPartition] = (Math.pow(domainProbSum[indexPartition], 2) * failureRates[indexPartition] * (1 - failureRates[indexPartition])) / Math.pow(executedTestCasesPerPartition[indexPartition], 2);
+				System.out.println("Gradient for partition " + indexPartition + ": " + gradient[indexPartition]);
 			}
 
 			// Find the partition with the maximum gradient
@@ -135,6 +144,11 @@ public class GBSSelector extends TestCaseSelector {
 		this.executionTime = endTime - initTime;
 		this.numberOfExecutedTestCases = indexCurrentTest;
 		this.numberOfDetectedFailurePoints = totalFailurePoint;
+
+		// Log the final results
+		System.out.println("Total executed test cases: " + this.numberOfExecutedTestCases);
+		System.out.println("Total detected failure points: " + this.numberOfDetectedFailurePoints);
+		System.out.println("Estimated reliability: " + this.REstimate);
 	}
 
 	// Method to compute true reliability
@@ -164,3 +178,7 @@ public class GBSSelector extends TestCaseSelector {
 		return this.partitions.get(partitionIndex).get(randIndex);
 	}
 }
+
+
+
+

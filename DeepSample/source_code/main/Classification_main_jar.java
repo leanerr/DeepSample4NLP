@@ -78,12 +78,11 @@ public class Classification_main_jar {
 				writer.write("accuracy,failures\n");
 
 				for (int j = 0; j < rep; j++) {
+					// Reset and shuffle test suite
 					completeTestSuite.clear();
 					for (ArrayList<TestCase> partition : partitions) {
 						completeTestSuite.addAll(partition);
 					}
-
-					// Shuffle the test suite to ensure different starting conditions
 					Collections.shuffle(completeTestSuite);
 
 					StratifiedRandomSelectorWOR srs = new StratifiedRandomSelectorWOR(completeTestSuite, partitions, NPartitionsSimulation, 0, budget, 0);
@@ -102,12 +101,11 @@ public class Classification_main_jar {
 				writer.write("accuracy,failures\n");
 
 				for (int j = 0; j < rep; j++) {
+					// Reset and shuffle test suite
 					completeTestSuite.clear();
 					for (ArrayList<TestCase> partition : partitions) {
 						completeTestSuite.addAll(partition);
 					}
-
-					// Shuffle the test suite to ensure different starting conditions
 					Collections.shuffle(completeTestSuite);
 
 					GBSSelector ats = new GBSSelector(completeTestSuite, partitions, NPartitionsSimulation, 0, budget);
@@ -126,7 +124,8 @@ public class Classification_main_jar {
 				writer.write("accuracy,failures\n");
 
 				for (int j = 0; j < rep; j++) {
-					completeTestSuite_copy = new ArrayList<>(completeTestSuite);  // Create a fresh copy
+					// Create a fresh copy for each run
+					completeTestSuite_copy = new ArrayList<>(completeTestSuite);
 					RHCSSelector rdts = new RHCSSelector(completeTestSuite_copy, budget, budget);
 					rdts.selectAndRunTestCase(95);
 					System.out.println(rdts.estimate + "    " + rdts.numberOfFailedTestCases);
@@ -184,7 +183,6 @@ public class Classification_main_jar {
 		}
 	}
 }
-
 
 /*
 java -cp "DeepSample/DeepSample_part_1_class.jar:libs/commons-lang3-3.12.0.jar:libs/commons-math3-3.6.1.jar:libs/weka.jar" main.Classification_main_jar imdb300AuxDS 0 2999

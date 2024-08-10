@@ -120,6 +120,7 @@ public class RHCSSelector extends TestCaseSelector {
 			sumOverSize += size[t];
 		}
 
+		// Check for zero sumOverSize and handle appropriately
 		if (sumOverSize == 0) {
 			throw new Exception("Sum of expected probabilities is zero, cannot proceed with test case selection.");
 		}
@@ -185,6 +186,7 @@ public class RHCSSelector extends TestCaseSelector {
 				}
 			}
 		}
+
 		double randomDouble;
 		int indexOfUnitToRead = -1;
 		ArrayList<Integer> indexesToRemove = new ArrayList<>();
@@ -194,7 +196,6 @@ public class RHCSSelector extends TestCaseSelector {
 				System.out.println("Warning: Probability sum of group " + i + " is zero, skipping this group.");
 				continue;  // Skip groups with zero probability sum
 			}
-
 			randomDouble = random.nextDouble() * probSumOfGroup[i];
 			for (int j = 0; j < GMatrix[0].length; j++) {
 				if (randomDouble <= cumProbOfGroup[i][j]) {
