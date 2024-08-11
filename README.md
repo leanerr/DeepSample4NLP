@@ -1,12 +1,13 @@
 
-To update the README for your DeepSample project, incorporating the new content for DeepSamplePy and fixing the GBS and RHC-S definitions, here's how you can proceed:
-
----
 
 # DeepSample4NLP Projects
 
-DeepSample is a comprehensive sampling tool designed for performing advanced sampling techniques on datasets to facilitate enhanced analysis and processing. The project leverages Java for computational efficiency and Python for preprocessing and threshold calculations. It includes two main components: **DeepEST**, **SUPS**, and a new Python-based component **DeepSamplePy**.
+DeepSample is a comprehensive sampling tool designed for performing advanced sampling techniques on datasets to facilitate enhanced analysis and processing. The project is divided into two main components:
 
+	1.	DeepSample: This component is implemented in Java and includes the DeepEST, SUPS, and RHC-S sampling methods. It leverages Java for computational efficiency in executing these sophisticated sampling algorithms.
+	2.	DeepSamplePy: This component is implemented in Python and encompasses the GBS, SRS, SSRS, and 2-UPS sampling methods. It utilizes Python for its flexibility and ease of integrating modern machine learning frameworks.
+
+Both components work together to provide a robust framework for sampling and analysis across different datasets.
 ## Table of Contents
 
 - [Project Architecture](#project-architecture)
