@@ -4,8 +4,9 @@
 
 DeepSample is a comprehensive sampling tool designed for performing advanced sampling techniques on datasets to facilitate enhanced analysis and processing. The project is divided into two main components:
 
-	1.	DeepSample: This component is implemented in Java and includes the DeepEST, SUPS, and RHC-S sampling methods. It leverages Java for computational efficiency in executing these sophisticated sampling algorithms.
-	2.	DeepSamplePy: This component is implemented in Python and encompasses the GBS, SRS, SSRS, and 2-UPS sampling methods. It utilizes Python for its flexibility and ease of integrating modern machine learning frameworks.
+1.	DeepSample: This component is implemented in Java and includes the **DeepEST, SUPS, and RHC-S** sampling methods. It leverages Java for computational efficiency in executing these sophisticated sampling algorithms.
+
+2. DeepSamplePy: This component is implemented in Python and encompasses the **GBS, SRS, SSRS, and 2-UPS** sampling methods. It utilizes Python for its flexibility and ease of integrating modern machine learning frameworks.
 
 Both components work together to provide a robust framework for sampling and analysis across different datasets.
 ## Table of Contents
