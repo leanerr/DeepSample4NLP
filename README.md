@@ -115,7 +115,7 @@ DeepSample Framework supports the following classification methods for testing a
 - **GBS (Gradient-Based Sampling)**: Unlike SSRS, this technique decides step by step which partition the next example will be drawn from, based on gradient descent. The partition is chosen to maximize the reduction of variance.
 - **RHC-S (RHC-Sampling)**: A method that divides the operational dataset into groups with SRS without replacement for the first group and continues for subsequent groups, minimizing variance and using the Rao-Hartley-Cochran (RHC) estimator.
 - **SSRS (Stratified Sampling with Random Sampling)**: Combines stratified sampling techniques with random sampling for better representation.
-- **SUPS (Sampling Using Prediction Sensitivity)**: Applies sampling strategies based on prediction sensitivity to improve failure detection.
+- **SUPS (Simple Unequal Probability Sampling)**: Applies sampling strategies based on prediction sensitivity to improve failure detection.
 - **SRS (Simple Random Sampling)**: SRS with replacement, where all examples have the same probability to be selected, typically used as a baseline.
 
 ## Directory Structure
