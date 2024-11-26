@@ -1,8 +1,8 @@
 
 
-# DeepSample4NLP Projects
+# Adaptive Probabilistic Operational Testing for Large Language Models Evaluation 
 
-DeepSample is a comprehensive sampling tool designed for performing advanced sampling techniques on datasets to facilitate enhanced analysis and processing. The project is divided into two main components:
+This project is a comprehensive sampling tool designed for performing advanced sampling techniques on datasets to facilitate enhanced analysis and processing. The project is divided into two main components:
 
 1.	DeepSample: This component is implemented in Java and includes the **DeepEST, SUPS, and RHC-S** sampling methods. It leverages Java for computational efficiency in executing these sophisticated sampling algorithms.
 
@@ -41,7 +41,7 @@ The DeepSample project is structured into distinct components that manage differ
 
 ## Cloning the Repository
 
-To get started with the DeepSample project, clone the repository from GitHub:
+To get started with this project, clone the repository from GitHub:
 
 ```bash
 git clone https://github.com/leanerr/DeepSample4NLP.git
@@ -125,7 +125,7 @@ DeepSample Framework supports the following classification methods for testing a
 The project is organized as follows:
 
 ```plaintext
-DeepSample-master/
+Adaptive Probabilistic Operational Testing for Large Language Models Evaluation/
 │
 ├── dataset/
 │   ├── env/                       # Python virtual environment
