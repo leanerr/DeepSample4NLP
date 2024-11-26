@@ -25,7 +25,7 @@ Both components work together to provide a robust framework for sampling and ana
 The DeepSample project is structured into distinct components that manage different aspects of the workflow:
 
 1. **DeepEST Component**:
-   - **Python Scripts**: Calculate thresholds for various auxiliary variables such as Local Sensitivity Analysis (LSA) and Deep Sensitivity Analysis (DSA).
+   - **Python Scripts**: Calculate thresholds for various auxiliary variables such as Confidence.
    - **Java Processing**: Implements the DeepEST sampling algorithm using efficient Java classes.
 
 2. **SUPS Component**:
@@ -44,8 +44,7 @@ The DeepSample project is structured into distinct components that manage differ
 To get started with this project, clone the repository from GitHub:
 
 ```bash
-git clone https://github.com/leanerr/DeepSample4NLP.git
-cd DeepSample-master
+gh repo clone leanerr/OperationalTesting4LLMs
 ```
 
 This command will download the project files to your local machine and navigate you into the project directory.
@@ -129,8 +128,6 @@ Adaptive Probabilistic Operational Testing for Large Language Models Evaluation/
 │
 ├── dataset/
 │   ├── env/                       # Python virtual environment
-│   ├── threshold_lsa.py           # Python script to calculate LSA threshold
-│   ├── threshold_dsa.py           # Python script to calculate DSA threshold
 │   ├── *.csv                      # Dataset files
 │
 ├── DeepSample/
