@@ -9,6 +9,11 @@ This project is a comprehensive sampling tool designed for performing advanced s
 2. DeepSamplePy: This component is implemented in Python and encompasses the **GBS, SRS, SSRS, and 2-UPS** sampling methods. It utilizes Python for its flexibility and ease of integrating modern machine learning frameworks.
 
 Both components work together to provide a robust framework for sampling and analysis across different datasets.
+
+## PaperResults Folder
+
+The `PaperResults` folder contains a summary of plots, the main processed dataset used for deriving results, and a Jupyter Notebook file that reads and processes this dataset. This folder provides a consolidated view of the analysis and findings, enabling easy reference to key outputs and their corresponding visualizations.
+
 ## Table of Contents
 
 - [Project Architecture](#project-architecture)
