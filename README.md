@@ -228,5 +228,11 @@ The DeepSample project employs various datasets for training and evaluating the 
 
 ---
 
+## Experimentation Scope
+
+The experimentation investigates which strategies (sampling technique / auxiliary variable) are most effective for evaluating DistilBERT in the context of sentiment analysis tasks. Additionally, it serves as a demonstration that sampling-based methods can be adapted and improved for testing other LLMs in similar contexts.
+
+You can find the proof for the accuracy metrics mentioned in the paper, along with evidence of the correlation between auxiliary variables and failure cases, in the following Colab notebook: [Proof and Correlation Analysis](https://colab.research.google.com/drive/1SZ6ni5IiWOX0U8QPocxhq-A_nVLPDJ2a?usp=sharing).
+(https://colab.research.google.com/drive/1SZ6ni5IiWOX0U8QPocxhq-A_nVLPDJ2a?usp=sharing)
 
 
